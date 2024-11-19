@@ -3,7 +3,9 @@ package com.example.plugins
 import com.example.model.Curse
 import com.example.model.GestionAlumnos
 import com.example.model.Alumno
+import com.example.model.Curso
 import com.example.model.Genero
+import com.example.model.GestionAulas
 import com.example.model.GestionPeliculas
 import io.ktor.serialization.JsonConvertException
 import io.ktor.server.application.*
@@ -88,10 +90,10 @@ fun Application.configureRouting() {
 
         route("/peliculas")
         {
-            get() {
+            get {
                 call.respond(GestionPeliculas.getPeliculas())
             }
-            get("/peliculas/genero/{genero}"){
+            get("/genero/{genero}"){
                 val gereroTxt= call.pathParameters["genero"]
                 val genero=Genero.valueOf(gereroTxt!!)
                 val peliculas = GestionPeliculas.getPeliculaPorGenero(genero)
@@ -100,6 +102,17 @@ fun Application.configureRouting() {
                 } else {
                     call.respond(peliculas)
                 }
+            }
+        }
+        route("aulas"){
+            get{
+                call.respond(GestionAulas.getAulas())
+            }
+            get("/cursos/{curso}"){
+                val cursoTxt=call.pathParameters["curso"]
+                val curse=Curso.valueOf(cursoTxt!!)
+                val aulasCurso=GestionAulas.getAulasPorCurso(curse)
+               TODO()
             }
         }
     }

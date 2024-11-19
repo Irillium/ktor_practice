@@ -1,7 +1,7 @@
 package com.example.model
 
 object GestionPeliculas {
-    val peliculas = mutableListOf(
+    private val peliculas = mutableListOf(
         Pelicula(
             id = 1,
             titulo = "El Misterio en la Niebla",
