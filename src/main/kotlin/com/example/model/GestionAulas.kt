@@ -9,10 +9,10 @@ object GestionAulas {
     )
 
     fun getAulas()= aulas
-    fun getAulaPorId(id:Int)= aulas.filter {
+    fun getAulaPorId(id:Int)= aulas.find {
         it.id==id
     }
-    fun getAulasPorCurso(curso:Curso)= aulas.find {
+    fun getAulasPorCurso(curso:Curso)= aulas.filter {
         it.curso==curso
     }
 

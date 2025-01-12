@@ -1,8 +1,8 @@
 package com.example.plugins
 
-import com.example.model.Curse
 import com.example.model.GestionAlumnos
 import com.example.model.Alumno
+import com.example.model.Aula
 import com.example.model.Curso
 import com.example.model.Genero
 import com.example.model.GestionAulas
@@ -23,22 +23,22 @@ fun Application.configureRouting() {
         }
 
         route("/alumnos") {
-            get("/alumnos") {
+            get { // GET /alumnos
                 call.respond(
                     GestionAlumnos.getStudents()
                 )
             }
-            get("/alumnos/{curso}") {
-                val cursoTxt = call.pathParameters["curso"]
-                val curso = Curse.valueOf(cursoTxt!!)
+            get("/curso/{curso}") { // GET /alumnos/curso/{curso}
+                val cursoTxt = call.parameters["curso"]
+                val curso = Curso.valueOf(cursoTxt!!)
                 val alumnos = GestionAlumnos.getStudentsporCurso(curso)
                 if (alumnos.isEmpty()) {
-                    call.respondText(" No se han encontrado alumnos ")
+                    call.respondText("No se han encontrado alumnos")
                 } else {
                     call.respond(alumnos)
                 }
             }
-            get("/nombre/{paramNombre}") {
+            get("/nombre/{paramNombre}") { // GET /alumnos/nombre/{nombre}
                 val nombre = call.parameters["paramNombre"]
                 if (nombre == null) {
                     call.respondText("El parámetro de búsqueda es obligatorio")
@@ -51,19 +51,7 @@ fun Application.configureRouting() {
                     }
                 }
             }
-            get("/delete/{idAlumno}") {
-                val idAlumno = call.pathParameters["idAlumno"]
-                if (idAlumno != null) {
-                    if (GestionAlumnos.deleteAlumno(idAlumno.toInt())) {
-                        call.respondText("Alumno con id $idAlumno se ha eliminado correctamente")
-                    } else {
-                        call.respondText("No se encuentra el alumno con id $idAlumno")
-                    }
-                } else {
-                    call.respondText("No se han introducido datos")
-                }
-            }
-            delete("/eliminar/{idAlumno}") {
+            delete("/eliminar/{idAlumno}") { // DELETE /alumnos/eliminar/{idAlumno}
                 val idAlumno = call.parameters["idAlumno"]
                 if (idAlumno != null) {
                     if (GestionAlumnos.deleteAlumno(idAlumno.toInt())) {
@@ -75,7 +63,7 @@ fun Application.configureRouting() {
                     call.respondText("No se han introducido datos")
                 }
             }
-            post {
+            post { // POST /alumnos
                 try {
                     val alumno = call.receive<Alumno>()
                     val alumnoInsertado = GestionAlumnos.nuevoAlumno(alumno)
@@ -88,14 +76,15 @@ fun Application.configureRouting() {
             }
         }
 
+
         route("/peliculas")
         {
             get {
                 call.respond(GestionPeliculas.getPeliculas())
             }
-            get("/genero/{genero}"){
-                val gereroTxt= call.pathParameters["genero"]
-                val genero=Genero.valueOf(gereroTxt!!)
+            get("/genero/{genero}") {
+                val gereroTxt = call.pathParameters["genero"]
+                val genero = Genero.valueOf(gereroTxt!!)
                 val peliculas = GestionPeliculas.getPeliculaPorGenero(genero)
                 if (peliculas.isEmpty()) {
                     call.respondText(" No se han encontrado peliculas con ese genero ")
@@ -104,15 +93,43 @@ fun Application.configureRouting() {
                 }
             }
         }
-        route("aulas"){
-            get{
+        route("aulas") {
+            get {
                 call.respond(GestionAulas.getAulas())
             }
-            get("/cursos/{curso}"){
-                val cursoTxt=call.pathParameters["curso"]
-                val curse=Curso.valueOf(cursoTxt!!)
-                val aulasCurso=GestionAulas.getAulasPorCurso(curse)
-               TODO()
+            get("/cursos/{curso}") {
+                val cursoTxt = call.pathParameters["curso"]
+                val curse = Curso.valueOf(cursoTxt!!)
+                val aulasCurso = GestionAulas.getAulasPorCurso(curse)
+                if (aulasCurso.isEmpty()) {
+                    call.respondText("No se encuentras aulas")
+                } else {
+                    call.respond(aulasCurso)
+                }
+            }
+
+            get("/eliminar/{idAula}") {
+                val idAulaTxt = call.pathParameters["idAula"]
+                if (idAulaTxt != null) {
+                    val aula = GestionAulas.getAulaPorId(idAulaTxt.toInt())
+                    if(aula!=null){
+                        GestionAulas.deleteAulaPorId(aula.id)
+                        call.respondText("Se a eliminado el aula ${aula.denominacion}")
+                    }else{
+                        call.respondText("Ese aula no existe")
+                    }
+                }
+            }
+            post("/insertar/"){
+                try {
+                    val aula = call.receive<Aula>()
+                    val aulaInsertada = GestionAulas.addAula(aula)
+                    call.respond(aulaInsertada)
+                } catch (jsone: JsonConvertException) {
+                    call.respondText("¡Datos inválidos!")
+                } catch (ise: IllegalStateException) {
+                    call.respondText(ise.message.toString())
+                }
             }
         }
     }

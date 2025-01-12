@@ -10,6 +10,3 @@ data class Aula (
     val piso:Int,
     val pabellon:String
 )
-enum class Curso{
-    DAM1,DAM2,DAW1,DAW2
-}

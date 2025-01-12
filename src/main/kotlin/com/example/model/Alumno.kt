@@ -1,14 +1,14 @@
 package com.example.model
 import kotlinx.serialization.Serializable
 
-enum class Curse { DAM1, DAM2 }
-enum class Subject { EIE, PSP, AAD, PMDM, DDI }
+enum class Curso{ DAM1,DAM2,DAW1,DAW2 }
+enum class Asignatura { EIE, PSP, AAD, PMDM, DDI , SGE}
 @Serializable
 data class Alumno(
     var id: Int,
-    val name: String,
-    val dateBirth: String,
-    val curse: Curse,
+    val nombre: String,
+    val fechaNacimiento: String,
+    val curso: Curso,
     val email: String,
-    val subject: List<Subject>
+    val asignaturas: List<Asignatura>
 )

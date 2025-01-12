@@ -3,27 +3,27 @@ package com.example.model
 object GestionAlumnos {
     private val alumnos = mutableListOf(
         Alumno(
-            1, "Juan", "10/04/2003", Curse.DAM1,
-            "juan@example.com", listOf<Subject>(Subject.AAD, Subject.EIE, Subject.PSP)
+            1, "Juan", "10/04/2003", Curso.DAM1,
+            "juan@example.com", listOf<Asignatura>(Asignatura.AAD, Asignatura.EIE, Asignatura.PSP)
         ),
         Alumno(
-            2, "Kai", "04/10/2000", Curse.DAM2,
-            "kai@example.com", listOf<Subject>(Subject.AAD, Subject.PMDM)
+            2, "Kai", "04/10/2000", Curso.DAM2,
+            "kai@example.com", listOf<Asignatura>(Asignatura.AAD, Asignatura.PMDM)
         ),
         Alumno(
-            3, "Alicia", "29/07/2002", Curse.DAM1,
-            "alicia@example.com", listOf<Subject>(Subject.DDI, Subject.PSP)
+            3, "Alicia", "29/07/2002", Curso.DAM1,
+            "alicia@example.com", listOf<Asignatura>(Asignatura.DDI, Asignatura.PSP)
         )
     )
 
     //si se pone igual no hace falta indicar que devuelve con los :
     fun getStudents() = alumnos
-    fun getStudentsporCurso(curso: Curse) = alumnos.filter {
-        it.curse == curso
+    fun getStudentsporCurso(curso: Curso) = alumnos.filter {
+        it.curso == curso
     }
 
     fun getAlumnoNombre(nombre: String) = alumnos.find {
-        it.name.equals(nombre, ignoreCase = true)
+        it.nombre.equals(nombre, ignoreCase = true)
     }
 
     fun getAlumnoId(id: Int) = alumnos.find {
